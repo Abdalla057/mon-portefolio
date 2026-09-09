@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {   useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
-import { Send, Github, Linkedin, Twitter, Mail, Phone, MapPin, CheckCircle2, Loader2 } from "lucide-react";
+import { Send, Github, Linkedin, Twitter, Mail, Phone, MapPin, CheckCircle2, Loader2, Home,  } from "lucide-react";
+
+
+
 
 // Même logique que les autres pages : fond violet foncé en arrière-plan de
 // page (cohérence du site), carte claire pour le formulaire (cohérence avec
@@ -22,6 +26,8 @@ const colors = {
   accentDeep: "#e04f16",
   accentSoft: "#ffe3cd",
   line: "#ece2d3",
+  success: "#22c55e",
+  successDeep: "#15803d",
 };
 
 const fonts = {
@@ -32,16 +38,8 @@ const fonts = {
 
 // ------------------------------------------------------------------
 // CONFIGURATION EMAILJS
-// À remplacer par tes propres identifiants, récupérables sur
-// https://dashboard.emailjs.com/ après avoir créé :
-//   1. un "Email Service" (ex: connecté à ton Gmail)      -> SERVICE_ID
-//   2. un "Email Template" (le corps de l'email reçu)     -> TEMPLATE_ID
-//   3. ta clé publique (Account > General > Public Key)   -> PUBLIC_KEY
-//
-// Le template EmailJS doit contenir des variables correspondant aux clés
-// envoyées dans templateParams ci-dessous, ex: {{first_name}}, {{email}}, etc.
 // ------------------------------------------------------------------
-const EMAILJS_SERVICE_ID = "service_z3ka5ev";
+const EMAILJS_SERVICE_ID = "service_hwp103p";
 const EMAILJS_TEMPLATE_ID = "template_hpb7i3a";
 const EMAILJS_PUBLIC_KEY = "hdDvuQnC-e_CbEPbq";
 
@@ -54,6 +52,7 @@ const inputStyle = {
 };
 
 export default function Contact() {
+  const navigate = useNavigate();
   const [form, setForm] = useState<{
     firstName: string;
     lastName: string;
@@ -65,6 +64,14 @@ export default function Contact() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Redirige vers l'accueil peu après l'envoi réussi
+  useEffect(() => {
+    if (sent) {
+      const timer = setTimeout(() => navigate("/Portefolio"), 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [sent, navigate]);
+
   const handleChange = (field: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -74,9 +81,6 @@ export default function Contact() {
     setError(null);
     setSending(true);
 
-    // Les clés ici (first_name, last_name, email, phone, message) doivent
-    // correspondre exactement aux variables {{...}} utilisées dans ton
-    // template EmailJS.
     const templateParams = {
       first_name: form.firstName,
       last_name: form.lastName,
@@ -190,6 +194,17 @@ export default function Contact() {
                   <p className="text-sm" style={{ color: colors.inkSoft }}>
                     Merci, je reviens vers vous rapidement.
                   </p>
+
+                  <button
+                    onClick={() => navigate("/Portefolio")}
+                    className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-white rounded-full px-6 py-3 transition-transform hover:-translate-y-0.5"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.success}, ${colors.successDeep})`,
+                      boxShadow: `0 10px 24px -8px ${colors.success}aa`,
+                    }}
+                  >
+                    <Home size={15} /> Retour à l'accueil
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -275,13 +290,15 @@ export default function Contact() {
 
           <div className="flex items-center gap-3">
             {[
-              { Icon: Github, label: "GitHub" },
-              { Icon: Linkedin, label: "LinkedIn" },
-              { Icon: Twitter, label: "Twitter" },
-            ].map(({ Icon, label }) => (
+              { Icon: Github, label: "GitHub", url: "https://github.com/" },
+              { Icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/ton-profil" },
+              { Icon: Twitter, label: "Twitter", url: "https://twitter.com/ton-pseudo" },
+            ].map(({ Icon, label, url }) => (
               <a
                 key={label}
-                href="#"
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                 style={{ border: `1px solid ${colors.lineLight}`, color: colors.textMuted }}

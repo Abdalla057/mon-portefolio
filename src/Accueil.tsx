@@ -228,10 +228,8 @@ export default function PortfolioHero() {
       </div>
       </nav>
 
-      {/* Wrapper centré pour le reste du contenu (nav sortie de ce wrapper
-          car elle est maintenant "fixed" et gère son propre centrage).
-          "pt-[88px]" compense la hauteur de la navbar fixe pour que le
-          hero ne parte pas caché dessous dès le chargement. */}
+      {/* CONTENU PRINCIPAL : section hero */}
+
       <div className="relative max-w-6xl mx-auto pt-[88px]">
 
       {/*  SECTION HERO*/}
@@ -288,8 +286,6 @@ export default function PortfolioHero() {
 
           {/* Réseaux sociaux + statistiques rapides */}
           <div className="flex flex-wrap items-center gap-6">
-            {/* Icônes sociales : cercle clair + icône foncée (inversé) pour bien
-                ressortir sur le fond violet, plutôt qu'un cercle sombre invisible */}
             <div className="flex gap-2.5">
               {[
                 { Icon: Github, label: "GitHub", href: "https://github.com/" },
