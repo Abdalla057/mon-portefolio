@@ -268,7 +268,7 @@ export default function PortfolioHero() {
           {/* Boutons d'appel à l'action */}
           <div className="flex flex-1 gap-3.5 mb-10 ">
             <a
-              href="/public/CV/AbdoulayeCV.pdf"
+              href="/CV/Abdoulaye-CV.pdf"
               className="inline-flex items-center gap-2 text-sm font-semibold text-white rounded-full px-6 py-3 transition-transform hover:-translate-y-0.5"
               style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentDeep})`, boxShadow: `0 10px 24px -8px ${colors.accent}aa` }}
             >
