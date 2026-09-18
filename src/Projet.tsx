@@ -35,16 +35,8 @@ const PROJECTS = [
       "Plateforme de l'apprentissage islamique en ligne complète avec un abonnement intégré et suivi des gestions de cours.",
     images: [
       "/images/project/islamique.png",
-      "/images/project/page1.png",
-      "/images/project/page2.png",
-      "/images/project/page3.png",
-      "/images/project/page4.png",
-      "/images/project/page5.png",
-      "/images/project/page6.png",
-      "/images/project/page7.png",
-      "/images/project/page8.png",
-      "/images/project/page9.png",
-      "/images/project/page10.png",
+      "/images/project/islamique-2.png",
+      "/images/project/islamique-3.png",
     ],
     tags: ["React", "Node.js"],
   },
@@ -53,11 +45,9 @@ const PROJECTS = [
     description:
       "Application de e-commerce avec gestion des produits, commandes et paiements.",
     images: [
-      "/images/project/line4.jpeg",
-      "/images/project/line3.jpeg",
       "/images/project/line6.jpeg",
-      "/images/project/line1.jpeg",
-      "/images/project/line2.jpeg",
+      "/images/project/line6-2.jpeg",
+      "/images/project/line6-3.jpeg",
     ],
     tags: ["React-Native", "Node.js", "Stripe"],
   },
@@ -67,6 +57,8 @@ const PROJECTS = [
       "Outil de gestion de rendez-vous pour les patients et les médecins avec planification et rappels.",
     images: [
       "/images/project/tableau de bord.jpeg",
+      "/images/project/tableau de bord-2.jpeg",
+      "/images/project/tableau de bord-3.jpeg",
     ],
     tags: ["Nest.js", "React", "Tailwind CSS"],
   },
@@ -75,8 +67,8 @@ const PROJECTS = [
     description: "Recherche et visite virtuelle de biens immobiliers.",
     images: [
       "/images/project/immobilier.jpeg",
-      "/images/project/immobilier1.jpeg",
-      "/images/project/logement.jpeg",
+      "/images/project/immobilier-2.jpeg",
+      "/images/project/immobilier-3.jpeg",
     ],
     tags: ["Django", "PostGIS"],
     codeUrl: "#",
@@ -347,7 +339,7 @@ export default function Projets() {
         </div>
 
         {/* Bouton "Voir tous les projets", centré, comme dans la maquette */}
-        <div className="flex justify-center BG">
+        <div className="flex justify-center">
           <a
             href="#"
             className="inline-flex items-center gap-2 text-sm font-semibold rounded-full px-6 py-3 border-2 transition-colors"
