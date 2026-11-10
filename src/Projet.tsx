@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ImageOff, Images, ChevronLeft, ChevronRight, X } from "lucide-react";
-
-// Même logique que la page Compétences : fond violet foncé en arrière-plan
-// de page (cohérence avec le reste du site), carte claire pour le contenu
-// (cohérence avec la maquette "My Projects").
-const colors = {
-  canvas: "#1b1130",
-  blobOrange: "#ff7a3d",
-  blobViolet: "#7c4dff",
-  card: "#fffaf3",
-  cardSoft: "#fbf5ec",
-  ink: "#1e1810",
-  inkSoft: "#6f6355",
-  inkFaint: "#a89c8b",
-  accent: "#ff6a2b",
-  accentDeep: "#e04f16",
-  accentSoft: "#ffe3cd",
-  line: "#ece2d3",
-};
-
-const fonts = {
-  display: "'Space Grotesk', sans-serif",
-  body: "'Inter', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-};
+import {
+  colors,
+  fonts,
+  fontImport,
+  staggerContainer,
+  staggerItem,
+  viewportOnce,
+} from "./theme";
 
 // Projets à afficher : "images" = tableau de chemins vers tes captures d'écran
 // (à déposer toi-même dans public/images/projects/). Mets au moins une image ;
@@ -92,9 +77,12 @@ function Project({ title, description, images, tags, onViewMore }: ProjectCardPr
   const hasMore = images.length > 1;
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden transition-transform hover:-translate-y-1 flex flex-col"
-      style={{ background: colors.cardSoft, border: `1px solid ${colors.line}`, boxShadow: "0 10px 24px -16px rgba(30,24,16,0.35)" }}
+    <motion.div
+      variants={staggerItem}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 260, damping: 22 }}
+      className="rounded-2xl overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-xl"
+      style={{ background: colors.cardSoft, border: `1px solid ${colors.line}`, boxShadow: "0 10px 24px -16px rgba(20,22,26,0.28)" }}
     >
       {/* Capture d'écran du projet — ratio fixe pour que toutes les cartes soient
           alignées, léger zoom au survol, repli propre tant que l'image n'est pas déposée */}
@@ -120,7 +108,7 @@ function Project({ title, description, images, tags, onViewMore }: ProjectCardPr
         {hasMore && (
           <div
             className="pointer-events-none absolute inset-0 transition-colors duration-300 group-hover:bg-black/15"
-            style={{ background: "rgba(20,14,8,0.06)" }}
+            style={{ background: "rgba(20,22,26,0.06)" }}
           />
         )}
 
@@ -131,7 +119,7 @@ function Project({ title, description, images, tags, onViewMore }: ProjectCardPr
               type="button"
               onClick={onViewMore}
               className="pointer-events-auto inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-4 py-2 backdrop-blur-sm transition-transform duration-200 hover:scale-105"
-              style={{ background: "rgba(30,24,16,0.72)", color: "#fffaf3", fontFamily: fonts.body }}
+              style={{ background: "rgba(20,22,26,0.78)", color: colors.card, fontFamily: fonts.body }}
             >
               <Images size={14} />
               Voir plus
@@ -142,7 +130,7 @@ function Project({ title, description, images, tags, onViewMore }: ProjectCardPr
         {/* Légère ombre en bas de l'image pour fondre la transition vers le texte */}
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 h-10"
-          style={{ background: `linear-gradient(to top, rgba(30,24,16,0.18), transparent)` }}
+          style={{ background: `linear-gradient(to top, rgba(20,22,26,0.2), transparent)` }}
         />
       </div>
 
@@ -167,7 +155,7 @@ function Project({ title, description, images, tags, onViewMore }: ProjectCardPr
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -195,24 +183,39 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
   }, [onClose, onNext, onPrev]);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(27,17,48,0.88)" }}
+      style={{ background: "rgba(20,22,26,0.9)" }}
       onClick={onClose}
     >
-      <div className="relative w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 14 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.97, y: 8 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="relative w-full max-w-3xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}
           className="absolute -top-11 right-0 inline-flex items-center gap-1.5 text-sm"
-          style={{ color: "#fffaf3" }}
+          style={{ color: colors.card }}
           aria-label="Fermer la galerie"
         >
           Fermer <X size={18} />
         </button>
 
         <div className="relative rounded-2xl overflow-hidden" style={{ background: colors.line }}>
-          <img
+          <motion.img
+            key={activeIndex}
+            initial={{ opacity: 0, scale: 0.985 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             src={images[activeIndex]}
             alt={`${title} — image ${activeIndex + 1} sur ${images.length}`}
             className="w-full max-h-[65vh] object-contain"
@@ -224,7 +227,7 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
                 type="button"
                 onClick={onPrev}
                 className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full p-2 transition-colors hover:opacity-80"
-                style={{ background: "rgba(30,24,16,0.55)", color: "#fffaf3" }}
+                style={{ background: "rgba(20,22,26,0.6)", color: colors.card }}
                 aria-label="Image précédente"
               >
                 <ChevronLeft size={18} />
@@ -233,7 +236,7 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
                 type="button"
                 onClick={onNext}
                 className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-2 transition-colors hover:opacity-80"
-                style={{ background: "rgba(30,24,16,0.55)", color: "#fffaf3" }}
+                style={{ background: "rgba(20,22,26,0.6)", color: colors.card }}
                 aria-label="Image suivante"
               >
                 <ChevronRight size={18} />
@@ -243,7 +246,7 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
         </div>
 
         <div className="flex items-center justify-between mt-3 px-1">
-          <p className="text-sm font-semibold" style={{ color: "#fffaf3", fontFamily: fonts.display }}>
+          <p className="text-sm font-semibold" style={{ color: colors.card, fontFamily: fonts.display }}>
             {title}
           </p>
           {images.length > 1 && (
@@ -257,7 +260,7 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
                   style={{
                     width: i === activeIndex ? 16 : 6,
                     height: 6,
-                    background: i === activeIndex ? colors.accent : "rgba(255,255,255,0.4)",
+                    background: i === activeIndex ? colors.accent : "rgba(244,241,236,0.35)",
                   }}
                   aria-label={`Aller à l'image ${i + 1}`}
                 />
@@ -265,8 +268,8 @@ function ProjectGallery({ title, images, activeIndex, onClose, onPrev, onNext, o
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -293,7 +296,7 @@ export default function Projets() {
   };
 
   return (
-    // Fond de page violet foncé (identique aux autres pages), blobs ambiants,
+    // Fond de page graphite (identique aux autres pages), blobs ambiants,
     // carte claire au centre pour le contenu (comme "My Projects" de la maquette).
     <div
       id="projet"
@@ -301,15 +304,15 @@ export default function Projets() {
       style={{ background: colors.canvas }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        ${fontImport}
       `}</style>
 
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-a absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", top: "-18vw", right: "-12vw", background: colors.blobOrange, filter: "blur(100px)", opacity: 0.4 }}
       />
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-b absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", bottom: "-18vw", left: "-12vw", background: colors.blobViolet, filter: "blur(100px)", opacity: 0.35 }}
       />
 
@@ -319,7 +322,13 @@ export default function Projets() {
         style={{ background: colors.card, fontFamily: fonts.body }}
       >
         {/* En-tête centré : titre + sous-titre, comme dans la maquette */}
-        <div className="text-center mb-10 max-w-md mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="text-center mb-10 max-w-md mx-auto"
+        >
           <h2
             className="font-bold leading-[1.1] mb-3"
             style={{ fontFamily: fonts.display, color: colors.ink, fontSize: "clamp(1.8rem, 3vw, 2.4rem)", letterSpacing: "-0.02em" }}
@@ -329,14 +338,20 @@ export default function Projets() {
           <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>
             Un aperçu de mes réalisations récentes.
           </p>
-        </div>
+        </motion.div>
 
         {/* Grille de projets : 1 colonne mobile, 2 tablette, 3 desktop — comme la maquette */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10"
+        >
           {PROJECTS.map((project, index) => (
             <Project key={project.title} {...project} onViewMore={() => openGallery(index)} />
           ))}
-        </div>
+        </motion.div>
 
         {/* Bouton "Voir tous les projets", centré, comme dans la maquette */}
         <div className="flex justify-center">
@@ -351,17 +366,20 @@ export default function Projets() {
       </div>
 
       {/* Galerie plein écran d'un projet, affichée par-dessus toute la page */}
-      {activeProject && (
-        <ProjectGallery
-          title={activeProject.title}
-          images={activeProject.images}
-          activeIndex={activeImageIndex}
-          onClose={closeGallery}
-          onPrev={goPrev}
-          onNext={goNext}
-          onSelect={setActiveImageIndex}
-        />
-      )}
+      <AnimatePresence>
+        {activeProject && (
+          <ProjectGallery
+            key={activeProject.title}
+            title={activeProject.title}
+            images={activeProject.images}
+            activeIndex={activeImageIndex}
+            onClose={closeGallery}
+            onPrev={goPrev}
+            onNext={goNext}
+            onSelect={setActiveImageIndex}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

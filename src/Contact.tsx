@@ -1,40 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {   useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { Send, Github, Linkedin, Twitter, Mail, Phone, MapPin, CheckCircle2, Loader2, Home,  } from "lucide-react";
-
-
-
-
-// Même logique que les autres pages : fond violet foncé en arrière-plan de
-// page (cohérence du site), carte claire pour le formulaire (cohérence avec
-// la maquette "Get In Touch").
-const colors = {
-  canvas: "#1b1130",
-  blobOrange: "#ff7a3d",
-  blobViolet: "#7c4dff",
-  card: "#fffaf3",
-  cardSoft: "#fbf5ec",
-  ink: "#1e1810",
-  inkSoft: "#6f6355",
-  inkFaint: "#a89c8b",
-  textLight: "#f6f1ea",
-  textMuted: "#bdb0d9",
-  textFaint: "#8a7dab",
-  lineLight: "rgba(246,241,234,0.16)",
-  accent: "#ff6a2b",
-  accentDeep: "#e04f16",
-  accentSoft: "#ffe3cd",
-  line: "#ece2d3",
-  success: "#22c55e",
-  successDeep: "#15803d",
-};
-
-const fonts = {
-  display: "'Space Grotesk', sans-serif",
-  body: "'Inter', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-};
+import {
+  colors,
+  fadeInLeft,
+  fadeInRight,
+  fonts,
+  fontImport,
+  viewportOnce,
+} from "./theme";
 
 // ------------------------------------------------------------------
 // CONFIGURATION EMAILJS
@@ -112,25 +88,35 @@ export default function Contact() {
       style={{ background: colors.canvas }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        ${fontImport}
       `}</style>
 
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-a absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", top: "-18vw", left: "-12vw", background: colors.blobOrange, filter: "blur(100px)", opacity: 0.4 }}
       />
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-b absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", bottom: "-18vw", right: "-12vw", background: colors.blobViolet, filter: "blur(100px)", opacity: 0.35 }}
       />
 
-      <div className="relative w-full max-w-6xl flex flex-col gap-8">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative w-full max-w-6xl flex flex-col gap-8"
+      >
         {/* Carte claire, comme le bloc "Get In Touch" de la maquette */}
         <div
           className="relative rounded-3xl overflow-hidden shadow-2xl px-6 md:px-11 py-10 md:py-14"
           style={{ background: colors.card, fontFamily: fonts.body }}
         >
-          <div className="text-center mb-10 max-w-md mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+            className="text-center mb-10 max-w-md mx-auto"
+          >
             <h2
               className="font-bold leading-[1.1] mb-3"
               style={{ fontFamily: fonts.display, color: colors.ink, fontSize: "clamp(1.8rem, 3vw, 2.4rem)", letterSpacing: "-0.02em" }}
@@ -140,20 +126,27 @@ export default function Contact() {
             <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>
               Discutons de votre projet.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
             {/* left: photo + coordonnées */}
-            <div className="relative flex justify-center lg:justify-start">
+            <motion.div
+              variants={fadeInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative flex justify-center lg:justify-start group"
+            >
               <div
-                className="absolute rounded-[2rem] rotate-6"
+                className="absolute rounded-[2rem] rotate-6 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105"
                 style={{ width: "70%", height: "80%", background: colors.accentSoft }}
               />
               <div className="relative w-[240px] md:w-[320px] h-[280px] md:h-[340px] rounded-[2rem] overflow-hidden shadow-xl">
                 <img
                   src="/images/image4.png"
                   alt="Contactez Ouali"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
 
@@ -177,13 +170,22 @@ export default function Contact() {
                 <div className="flex items-center gap-2"><Phone size={13} /> +221 77 912 92 54</div>
                 <div className="flex items-center gap-2"><MapPin size={13} /> Dakar, Sénégal</div>
               </div>
-            </div>
+            </motion.div>
 
             {/* right: formulaire */}
-            <div>
+            <motion.div
+              variants={fadeInRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+            >
               {sent ? (
                 // État de confirmation après envoi réussi via EmailJS
-                <div
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
                   className="flex flex-col items-center justify-center text-center gap-3 rounded-2xl py-14 px-6"
                   style={{ background: colors.cardSoft, border: `1px solid ${colors.line}` }}
                 >
@@ -200,12 +202,12 @@ export default function Contact() {
                     className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-white rounded-full px-6 py-3 transition-transform hover:-translate-y-0.5"
                     style={{
                       background: `linear-gradient(135deg, ${colors.success}, ${colors.successDeep})`,
-                      boxShadow: `0 10px 24px -8px ${colors.success}aa`,
+                      boxShadow: `0 10px 24px -8px ${colors.successGlow}`,
                     }}
                   >
                     <Home size={15} /> Retour à l'accueil
                   </button>
-                </div>
+                </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
@@ -263,7 +265,7 @@ export default function Contact() {
                     type="submit"
                     disabled={sending}
                     className="sm:col-span-2 inline-flex items-center justify-center gap-2 text-sm font-semibold text-white rounded-full px-6 py-3.5 transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
-                    style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentDeep})`, boxShadow: `0 10px 24px -8px ${colors.accent}aa` }}
+                    style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentDeep})`, boxShadow: `0 10px 24px -8px ${colors.accentGlow}` }}
                   >
                     {sending ? (
                       <>
@@ -277,11 +279,11 @@ export default function Contact() {
                   </button>
                 </form>
               )}
-            </div>
+            </motion.div>
           </div>
         </div>
 
-        {/* Pied de page léger, posé directement sur le fond violet foncé */}
+        {/* Pied de page léger, posé directement sur le fond graphite */}
         <div
           className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 pb-2 text-xs"
           style={{ color: colors.textFaint, fontFamily: fonts.mono }}
@@ -290,9 +292,9 @@ export default function Contact() {
 
           <div className="flex items-center gap-3">
             {[
-              { Icon: Github, label: "GitHub", url: "https://github.com/" },
-              { Icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/ton-profil" },
-              { Icon: Twitter, label: "Twitter", url: "https://twitter.com/ton-pseudo" },
+              { Icon: Github, label: "GitHub", url: "https://github.com" },
+              { Icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/abdoulaye-sow-0b8a0b1b/" },
+              { Icon: Twitter, label: "Twitter", url: "https://x.com/abdalla54836597?s=11" },
             ].map(({ Icon, label, url }) => (
               <a
                 key={label}
@@ -310,7 +312,7 @@ export default function Contact() {
 
           <span>© {new Date().getFullYear()} MoodDev.</span>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from "react";
-
-// Même palette de base que le reste du site (fond violet foncé en arrière-plan
-// de page), mais la carte "Compétences" elle-même repasse en clair pour
-// coller à la maquette fournie (cartes blanches type "My Skills").
-const colors = {
-  canvas: "#1b1130",
-  blobOrange: "#ff7a3d",
-  blobViolet: "#7c4dff",
-  card: "#fffaf3",
-  cardSoft: "#fbf5ec",   // fond des mini-cartes de compétence
-  ink: "#1e1810",
-  inkSoft: "#6f6355",
-  inkFaint: "#a89c8b",
-  accent: "#ff6a2b",
-  accentDeep: "#e04f16",
-  accentSoft: "#ffe3cd",
-  line: "#ece2d3",
-};
-
-const fonts = {
-  display: "'Space Grotesk', sans-serif",
-  body: "'Inter', sans-serif",
-  mono: "'JetBrains Mono', monospace",
-};
+import { motion } from "framer-motion";
+import {
+  colors,
+  fonts,
+  fontImport,
+  staggerContainer,
+  staggerItem,
+  viewportOnce,
+} from "./theme";
 
 // Compétences à afficher : "logo" = chemin vers ton image (à déposer toi-même
 // dans public/images/competence/), "brand" = couleur de la techno, utilisée
@@ -61,16 +46,19 @@ function SkillCard({ name, level, logo, brand }: CarteCompetenceProps) {
   }, [level]);
 
   return (
-    <div
-      className="group relative rounded-2xl p-4 pt-5 overflow-hidden transition-all duration-300 hover:-translate-y-1"
-      style={{ background: colors.cardSoft, border: `1px solid ${colors.line}`, boxShadow: "0 10px 24px -18px rgba(30,24,16,0.35)" }}
+    <motion.div
+      variants={staggerItem}
+      whileHover={{ y: -6, scale: 1.015 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="group relative rounded-2xl p-4 pt-5 overflow-hidden transition-shadow duration-300 hover:shadow-lg"
+      style={{ background: colors.cardSoft, border: `1px solid ${colors.line}`, boxShadow: "0 10px 24px -18px rgba(20,22,26,0.28)" }}
     >
       {/* Liseré coloré en haut, propre à chaque techno */}
       <div className="absolute inset-x-0 top-0 h-1" style={{ background: brand }} />
 
       <div className="flex items-center gap-2.5 mb-4">
         <span
-          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105"
+          className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105"
           style={{ background: `linear-gradient(135deg, ${brand}2e, ${brand}0d)`, boxShadow: `0 6px 14px -9px ${brand}` }}
         >
           {!imgError ? (
@@ -102,28 +90,28 @@ function SkillCard({ name, level, logo, brand }: CarteCompetenceProps) {
           style={{ width: `${animatedLevel}%`, background: `linear-gradient(90deg, ${brand}, ${brand}cc)` }}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export default function Competences() {
   return (
-    // Fond de page violet foncé (identique au reste du site), avec les blobs
+    // Fond de page graphite (identique au reste du site), avec les blobs
     // ambiants placés ICI (et non plus dans la carte, qui redevient claire).
     <div
       id="competence" className="relative min-h-screen w-full flex items-center justify-center p-4 md:p-8 overflow-hidden"
       style={{ background: colors.canvas }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        ${fontImport}
       `}</style>
 
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-a absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", top: "-18vw", left: "-12vw", background: colors.blobOrange, filter: "blur(100px)", opacity: 0.4 }}
       />
       <div
-        className="absolute rounded-full pointer-events-none"
+        className="anim-blob-b absolute rounded-full pointer-events-none"
         style={{ width: "45vw", height: "45vw", bottom: "-18vw", right: "-12vw", background: colors.blobViolet, filter: "blur(100px)", opacity: 0.35 }}
       />
 
@@ -133,7 +121,13 @@ export default function Competences() {
         style={{ background: colors.card, fontFamily: fonts.body }}
       >
         {/* En-tête centré : titre + sous-titre, comme dans la maquette */}
-        <div className="text-center mb-10 max-w-md mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="text-center mb-10 max-w-md mx-auto"
+        >
           <h2
             className="font-bold leading-[1.1] mb-3"
             style={{ fontFamily: fonts.display, color: colors.ink, fontSize: "clamp(1.8rem, 3vw, 2.4rem)", letterSpacing: "-0.02em" }}
@@ -143,15 +137,21 @@ export default function Competences() {
           <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>
             Technologies et outils que j'utilise pour créer des expériences web exceptionnelles.
           </p>
-        </div>
+        </motion.div>
 
         {/* Grille de compétences : 2 colonnes mobile, 3 tablette, 5 desktop —
             10 compétences donc 2 lignes bien pleines sur grand écran */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5"
+        >
           {COMPETENCES.map((skill) => (
             <SkillCard key={skill.name} {...skill} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

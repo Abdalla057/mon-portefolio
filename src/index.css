@@ -1,3 +1,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ------------------------------------------------------------------
+   THÈMES DU PORTFOLIO
+   Les variables sont consommées par src/theme.ts.
+   Le thème sombre est le thème par défaut ; le thème clair est activé
+   via data-theme="light" sur <html>.
+   ------------------------------------------------------------------ */
+:root {
+  color-scheme: dark;
+
+  --color-canvas: #14161a;
+  --color-blob-orange: #e07a3f;
+  --color-blob-violet: #0f766e;
+  --color-card: #f7f4ee;
+  --color-card-soft: #f1ece4;
+  --color-ink: #1b1917;
+  --color-ink-soft: #5c554c;
+  --color-ink-faint: #82796e;
+  --color-text-light: #f4f1ec;
+  --color-text-muted: #c4bcb1;
+  --color-text-faint: #8f877c;
+  --color-line-light: rgba(244, 241, 236, 0.14);
+  --color-accent: #e07a3f;
+  --color-accent-deep: #b45309;
+  --color-accent-soft: #fbe6d5;
+  --color-line: #e4ded4;
+  --color-editor-bg: #17191d;
+  --color-editor-bar: #1f2228;
+  --color-success: #22c55e;
+  --color-success-deep: #15803d;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-canvas: #f1ede6;
+  --color-blob-orange: #f2b27e;
+  --color-blob-violet: #9fd4cf;
+  --color-card: #fffdf9;
+  --color-card-soft: #f7f2ea;
+  --color-ink: #1b1917;
+  --color-ink-soft: #5c554c;
+  --color-ink-faint: #82796e;
+  --color-text-light: #1b1917;
+  --color-text-muted: #5c554c;
+  --color-text-faint: #82796e;
+  --color-line-light: rgba(27, 25, 23, 0.1);
+  --color-accent: #b45309;
+  --color-accent-deep: #92400e;
+  --color-accent-soft: #f6e2cf;
+  --color-line: #ddd4c7;
+  --color-editor-bg: #f7f2ea;
+  --color-editor-bar: #efe8dd;
+  --color-success: #15803d;
+  --color-success-deep: #166534;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-text-light);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Halos d'arrière-plan en mouvement très lent */
+@keyframes driftBlobA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+
+@keyframes driftBlobB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, 3%, 0) scale(1.06); }
+}
+
+.anim-blob-a { animation: driftBlobA 18s ease-in-out infinite; }
+.anim-blob-b { animation: driftBlobB 22s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-blob-a,
+  .anim-blob-b {
+    animation: none;
+  }
+}
