@@ -19,9 +19,17 @@ const PROJECTS = [
     description:
       "Plateforme de l'apprentissage islamique en ligne complète avec un abonnement intégré et suivi des gestions de cours.",
     images: [
-      "/images/project/islamique.png",
-      "/images/project/islamique-2.png",
-      "/images/project/islamique-3.png",
+      "/images/project/page1.png",
+      "/images/project/page2.png",
+      "/images/project/page3.png",
+      "/images/project/page4.png",
+      "/images/project/page5.png",
+      "/images/project/page6.png",
+      "/images/project/page7.png",
+      "/images/project/page8.png",
+      "/images/project/page9.png",
+      "/images/project/page10.png",
+     
     ],
     tags: ["React", "Node.js"],
   },
@@ -30,9 +38,11 @@ const PROJECTS = [
     description:
       "Application de e-commerce avec gestion des produits, commandes et paiements.",
     images: [
+      "/images/project/line1.jpeg",
+      "/images/project/line2.jpeg",
+      "/images/project/line3.jpeg",
+      "/images/project/line4.jpeg",
       "/images/project/line6.jpeg",
-      "/images/project/line6-2.jpeg",
-      "/images/project/line6-3.jpeg",
     ],
     tags: ["React-Native", "Node.js", "Stripe"],
   },
@@ -42,8 +52,7 @@ const PROJECTS = [
       "Outil de gestion de rendez-vous pour les patients et les médecins avec planification et rappels.",
     images: [
       "/images/project/tableau de bord.jpeg",
-      "/images/project/tableau de bord-2.jpeg",
-      "/images/project/tableau de bord-3.jpeg",
+     
     ],
     tags: ["Nest.js", "React", "Tailwind CSS"],
   },
@@ -52,10 +61,22 @@ const PROJECTS = [
     description: "Recherche et visite virtuelle de biens immobiliers.",
     images: [
       "/images/project/immobilier.jpeg",
-      "/images/project/immobilier-2.jpeg",
-      "/images/project/immobilier-3.jpeg",
+      "/images/project/immobilier.jpeg",
+      "/images/project/immobilier.jpeg",
     ],
     tags: ["Django", "PostGIS"],
+    codeUrl: "#",
+    demoUrl: "#",
+  },
+  {
+    title: "Gestionnaire de remboursements pour les entreprises",
+    description: "Système de gestion des remboursements pour les entreprises.",
+    images: [
+      "/images/project/remboursement.jpeg",
+      "/images/project/remboursement.jpeg",
+      "/images/project/remboursement.jpeg",
+    ],
+    tags: ["ARRIVE BIENTOT"],
     codeUrl: "#",
     demoUrl: "#",
   },
